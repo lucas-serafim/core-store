@@ -14,7 +14,7 @@ public class Category {
     private UUID id;
     private String name;
 
-    @OneToMany()
+    @OneToMany(mappedBy = "category")
     private List<Product> products;
 
     public Category() {
