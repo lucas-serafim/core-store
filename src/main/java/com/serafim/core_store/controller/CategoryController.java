@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1/core-store/category")
+@RequestMapping("/v1/core-store/categories")
 public class CategoryController {
 
     @Autowired

@@ -24,11 +24,44 @@ public class Product {
     }
 
     public Product(String name, Integer quantity, Integer price, String description, Category category) {
-        this.name = name;
-        this.quantity = quantity;
-        this.price = price;
-        this.description = description;
+        updateName(name);
+        updateQuantity(quantity);
+        updatePrice(price);
+        updateDescription(description);
+
         this.category = category;
+    }
+
+    public void updateName(String name) {
+        if (name.length() < 3 || name.length() > 150) {
+            throw new IllegalArgumentException("Invalid name.");
+        }
+
+        this.name = name;
+    }
+
+    public void updateQuantity(Integer quantity) {
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Quantity should be positive");
+        }
+
+        this.quantity = quantity;
+    }
+
+    public void updatePrice(Integer price) {
+        if (price < 0) {
+            throw new IllegalArgumentException("Price should be positive");
+        }
+
+        this.price = price;
+    }
+
+    public void updateDescription(String description) {
+        if (description.isEmpty()) {
+            description = "no description";
+        }
+
+        this.description = description;
     }
 
     public UUID getId() {

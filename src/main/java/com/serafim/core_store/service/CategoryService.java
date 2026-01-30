@@ -8,6 +8,7 @@ import com.serafim.core_store.model.Category;
 import com.serafim.core_store.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -18,6 +19,7 @@ public class CategoryService {
     @Autowired
     private CategoryRepository repository;
 
+    @Transactional
     public CategoryDTO create(CreateUpdateCategoryDTO dto) {
         String categoryNameLower = dto.name().toLowerCase();
 
@@ -33,24 +35,19 @@ public class CategoryService {
         return new CategoryDTO(category.getId(), category.getName());
     }
 
+    @Transactional
     public CategoryDTO updateName(UUID id, String name) {
         String categoryNameLower = name.toLowerCase();
 
-        Optional<Category> category = this.repository.findById(id);
+        Category category = this.repository.findById(id).orElseThrow(CategoryNotFoundException::new);
 
-        if (category.isEmpty()) {
-            throw new CategoryNotFoundException("Category not found. ID: " + id);
-        }
+        category.updateName(categoryNameLower);
 
-        Category categoryFounded = category.get();
-
-        categoryFounded.updateName(categoryNameLower);
-
-        this.repository.save(categoryFounded);
+        this.repository.save(category);
 
         return new CategoryDTO(
-                categoryFounded.getId(),
-                categoryFounded.getName()
+                category.getId(),
+                category.getName()
         );
     }
 }
