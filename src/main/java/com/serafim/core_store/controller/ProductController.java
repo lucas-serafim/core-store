@@ -44,4 +44,12 @@ public class ProductController {
         this.service.delete(productId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductDTO> findById(
+            @PathVariable UUID productId
+    ) {
+        ProductDTO productDTO = this.service.findById(productId);
+        return ResponseEntity.status(HttpStatus.OK).body(productDTO);
+    }
 }

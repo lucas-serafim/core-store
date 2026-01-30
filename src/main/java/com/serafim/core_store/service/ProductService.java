@@ -57,6 +57,12 @@ public class ProductService {
         productRepository.deleteById(productId);
     }
 
+    @Transactional
+    public ProductDTO findById(UUID productId) {
+        Product product = productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+        return mapToDTO(product);
+    }
+
     private ProductDTO mapToDTO(Product product) {
         return new ProductDTO(
                 product.getId(),
