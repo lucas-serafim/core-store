@@ -3,6 +3,7 @@ package com.serafim.core_store.controller;
 import com.serafim.core_store.dto.ExceptionResponseDTO;
 import com.serafim.core_store.exception.CategoryAlreadyExistsException;
 import com.serafim.core_store.exception.CategoryNotFoundException;
+import com.serafim.core_store.exception.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,6 +31,17 @@ public class CustomExceptionHandler {
         ExceptionResponseDTO responseDTO = new ExceptionResponseDTO(
                 e.getMessage(),
                 "CategoryNotFoundException",
+                Instant.now()
+        );
+
+        return new ResponseEntity<>(responseDTO, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    protected ResponseEntity<ExceptionResponseDTO> handlerProductNotFoundException(ProductNotFoundException e) {
+        ExceptionResponseDTO responseDTO = new ExceptionResponseDTO(
+                e.getMessage(),
+                "ProductNotFoundException",
                 Instant.now()
         );
 

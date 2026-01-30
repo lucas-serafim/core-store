@@ -36,4 +36,12 @@ public class ProductController {
         ProductDTO productDTO = this.service.update(productId, dto);
         return ResponseEntity.status(HttpStatus.OK).body(productDTO);
     }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> delete(
+            @PathVariable UUID productId
+    ) {
+        this.service.delete(productId);
+        return ResponseEntity.noContent().build();
+    }
 }

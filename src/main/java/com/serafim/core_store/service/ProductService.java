@@ -52,6 +52,11 @@ public class ProductService {
         return mapToDTO(product);
     }
 
+    @Transactional
+    public void delete(UUID productId) {
+        productRepository.deleteById(productId);
+    }
+
     private ProductDTO mapToDTO(Product product) {
         return new ProductDTO(
                 product.getId(),
