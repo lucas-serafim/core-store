@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -51,5 +52,16 @@ public class ProductController {
     ) {
         ProductDTO productDTO = this.service.findById(productId);
         return ResponseEntity.status(HttpStatus.OK).body(productDTO);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<ProductDTO>> findAll(
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String category
+    ) {
+        List<ProductDTO> productDTOList = this.service.findAll(pageNumber, pageSize, name, category);
+        return ResponseEntity.status(HttpStatus.OK).body(productDTOList);
     }
 }
