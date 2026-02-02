@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -31,5 +32,11 @@ public class CategoryController {
     ) {
         CategoryDTO categoryDTO = service.updateName(id, dto.name());
         return ResponseEntity.status(HttpStatus.OK).body(categoryDTO);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<CategoryDTO>> findAll() {
+        List<CategoryDTO> categoryDTOList = service.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(categoryDTOList);
     }
 }

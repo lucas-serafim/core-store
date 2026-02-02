@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -32,7 +32,7 @@ public class CategoryService {
         Category category = new Category(categoryNameLower);
         this.repository.save(category);
 
-        return new CategoryDTO(category.getId(), category.getName());
+        return mapToDTO(category);
     }
 
     @Transactional
@@ -45,6 +45,15 @@ public class CategoryService {
 
         this.repository.save(category);
 
+        return mapToDTO(category);
+    }
+
+    public List<CategoryDTO> findAll() {
+        List<Category> categories = this.repository.findAll();
+        return categories.stream().map(this::mapToDTO).toList();
+    }
+
+    private CategoryDTO mapToDTO(Category category) {
         return new CategoryDTO(
                 category.getId(),
                 category.getName()
