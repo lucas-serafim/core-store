@@ -17,16 +17,15 @@ public class OrderItem {
     @ManyToOne()
     private Order order;
 
-    @OneToOne()
+    @ManyToOne()
     private Product product;
 
     public OrderItem() {
     }
 
-    public OrderItem(Integer quantity, Integer priceAtPurchase, Order order, Product product) {
+    public OrderItem(Integer quantity, Integer priceAtPurchase, Product product) {
         this.quantity = quantity;
         this.priceAtPurchase = priceAtPurchase;
-        this.order = order;
         this.product = product;
     }
 
@@ -48,5 +47,9 @@ public class OrderItem {
 
     public Product getProduct() {
         return product;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }

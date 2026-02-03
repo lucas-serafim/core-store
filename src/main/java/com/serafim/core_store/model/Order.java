@@ -12,30 +12,32 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private Integer total_price;
+    private Integer totalPrice;
+
+    @Enumerated(EnumType.STRING)
     private OrderStatusEnum status;
 
     @ManyToOne()
     private User user;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 
     public Order() {
     }
 
-    public Order(Integer total_price, String status, User user) {
-        this.total_price = total_price;
-        this.status = OrderStatusEnum.valueOf(status);
-        this.user = user;
+    // TODO: Add user
+    public Order(Integer totalPrice, OrderStatusEnum status) {
+        this.totalPrice = totalPrice;
+        this.status = status;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public Integer getTotal_price() {
-        return total_price;
+    public Integer getTotalPrice() {
+        return totalPrice;
     }
 
     public OrderStatusEnum getStatus() {
@@ -48,5 +50,10 @@ public class Order {
 
     public List<OrderItem> getOrderItems() {
         return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        orderItems.forEach(i -> i.setOrder(this));
+        this.orderItems = orderItems;
     }
 }
