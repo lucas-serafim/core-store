@@ -4,6 +4,7 @@ import com.serafim.core_store.dto.CreateOrderDTO;
 import com.serafim.core_store.dto.OrderDTO;
 import com.serafim.core_store.dto.CreateOrderItemsDTO;
 import com.serafim.core_store.dto.OrderItemsDTO;
+import com.serafim.core_store.exception.ProductNotFoundException;
 import com.serafim.core_store.model.Order;
 import com.serafim.core_store.model.OrderItem;
 import com.serafim.core_store.model.OrderStatusEnum;
@@ -12,6 +13,7 @@ import com.serafim.core_store.repository.OrderRepository;
 import com.serafim.core_store.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ public class OrderService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Transactional
     public OrderDTO create(CreateOrderDTO dto) {
         List<UUID> uuids = dto.items().stream().map(CreateOrderItemsDTO::id).toList();
 
@@ -37,21 +40,27 @@ public class OrderService {
 
         int totalOrder = 0;
         List<OrderItem> orderItems = new ArrayList<>();
+        List<Product> productList = new ArrayList<>();
 
         for (CreateOrderItemsDTO item : dto.items()) {
             Product product = productMap.get(item.id());
 
-            if (product != null) {
-                int totalItem = product.getPrice() * item.quantity();
-
-                orderItems.add(new OrderItem(
-                        item.quantity(),
-                        product.getPrice(),
-                        product
-                ));
-
-                totalOrder += totalItem;
+            if (product == null) {
+                throw new ProductNotFoundException("Product not found. ID: " + item.id());
             }
+
+            int totalItem = product.getPrice() * item.quantity();
+
+            orderItems.add(new OrderItem(
+                    item.quantity(),
+                    product.getPrice(),
+                    product
+            ));
+
+            product.decreaseQuantity(item.quantity());
+            productList.add(product);
+
+            totalOrder += totalItem;
         }
 
         Order order = new Order(
@@ -62,6 +71,7 @@ public class OrderService {
         order.setOrderItems(orderItems);
 
         orderRepository.save(order);
+        productRepository.saveAll(productList);
 
         return mapToDTO(order);
     }

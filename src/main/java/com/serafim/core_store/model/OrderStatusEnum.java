@@ -3,7 +3,8 @@ package com.serafim.core_store.model;
 public enum OrderStatusEnum {
     PENDING("pending"),
     PAID("paid"),
-    SHIPPED("shipped");
+    SHIPPED("shipped"),
+    CANCELLED("cancelled");
 
     private String status;
 

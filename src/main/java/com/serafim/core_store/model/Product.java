@@ -64,6 +64,16 @@ public class Product {
         this.description = description;
     }
 
+    public void decreaseQuantity(Integer value) {
+        int total = this.quantity -= value;
+
+        if (total < 0) {
+            throw new IllegalArgumentException("Product out of stock.");
+        }
+
+        this.quantity = total;
+    }
+
     public UUID getId() {
         return id;
     }
