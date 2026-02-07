@@ -4,6 +4,8 @@ import com.serafim.core_store.dto.CreateOrderDTO;
 import com.serafim.core_store.dto.OrderDTO;
 import com.serafim.core_store.dto.CreateOrderItemsDTO;
 import com.serafim.core_store.dto.OrderItemsDTO;
+import com.serafim.core_store.exception.OrderSizeLimitException;
+import com.serafim.core_store.exception.OrderNotFoundException;
 import com.serafim.core_store.exception.ProductNotFoundException;
 import com.serafim.core_store.model.Order;
 import com.serafim.core_store.model.OrderItem;
@@ -15,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,8 +29,18 @@ public class OrderService {
     @Autowired
     private ProductRepository productRepository;
 
+    // TODO: limit order items
     @Transactional
     public OrderDTO create(CreateOrderDTO dto) {
+
+        if (dto.items().isEmpty()) {
+            throw new OrderSizeLimitException("Order must have at least 1 item.");
+        }
+
+        if (dto.items().size() > 10) {
+            throw new OrderSizeLimitException("Order size limit exceeded. Max order items: 10");
+        }
+
         List<UUID> uuids = dto.items().stream().map(CreateOrderItemsDTO::id).toList();
 
         List<Product> products = productRepository.findAllById(uuids);
@@ -74,6 +83,28 @@ public class OrderService {
         productRepository.saveAll(productList);
 
         return mapToDTO(order);
+    }
+
+    @Transactional
+    public OrderDTO cancel(UUID orderId) {
+        Optional<Order> orderOptional = this.orderRepository.findById(orderId);
+
+        if (orderOptional.isEmpty()) {
+            throw new OrderNotFoundException();
+        }
+        Order order = orderOptional.get();
+        order.cancel();
+
+        List<OrderItem> orderItems = order.getOrderItems();
+
+        for (OrderItem item : orderItems) {
+            int quantity = item.getQuantity();
+            item.getProduct().increaseQuantity(quantity);
+        }
+
+        this.orderRepository.save(order);
+
+        return this.mapToDTO(order);
     }
 
     private OrderDTO mapToDTO(Order order) {

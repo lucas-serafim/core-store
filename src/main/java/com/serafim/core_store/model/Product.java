@@ -64,8 +64,16 @@ public class Product {
         this.description = description;
     }
 
+    public void increaseQuantity(Integer value) {
+        if (value < 1) {
+            throw new IllegalArgumentException("Value must be positive.");
+        }
+
+        this.quantity += value;
+    }
+
     public void decreaseQuantity(Integer value) {
-        int total = this.quantity -= value;
+        int total = this.quantity - value;
 
         if (total < 0) {
             throw new IllegalArgumentException("Product out of stock.");

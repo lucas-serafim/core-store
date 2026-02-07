@@ -20,7 +20,7 @@ public class Order {
     @ManyToOne()
     private User user;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderItem> orderItems;
 
     public Order() {
@@ -30,6 +30,10 @@ public class Order {
     public Order(Integer totalPrice, OrderStatusEnum status) {
         this.totalPrice = totalPrice;
         this.status = status;
+    }
+
+    public void cancel() {
+        this.status = OrderStatusEnum.CANCELLED;
     }
 
     public UUID getId() {
