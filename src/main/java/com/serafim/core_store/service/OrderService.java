@@ -4,6 +4,7 @@ import com.serafim.core_store.dto.CreateOrderDTO;
 import com.serafim.core_store.dto.OrderDTO;
 import com.serafim.core_store.dto.CreateOrderItemsDTO;
 import com.serafim.core_store.dto.OrderItemsDTO;
+import com.serafim.core_store.exception.OrderStatusException;
 import com.serafim.core_store.exception.OrderSizeLimitException;
 import com.serafim.core_store.exception.OrderNotFoundException;
 import com.serafim.core_store.exception.ProductNotFoundException;
@@ -11,6 +12,7 @@ import com.serafim.core_store.model.Order;
 import com.serafim.core_store.model.OrderItem;
 import com.serafim.core_store.model.OrderStatusEnum;
 import com.serafim.core_store.model.Product;
+import com.serafim.core_store.repository.OrderItemRepository;
 import com.serafim.core_store.repository.OrderRepository;
 import com.serafim.core_store.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,9 @@ public class OrderService {
     @Autowired
     private ProductRepository productRepository;
 
-    // TODO: limit order items
+    @Autowired
+    private OrderItemRepository itemRepository;
+
     @Transactional
     public OrderDTO create(CreateOrderDTO dto) {
 
@@ -86,13 +90,43 @@ public class OrderService {
     }
 
     @Transactional
+    public OrderDTO removeItem(UUID orderId, UUID orderItemId) {
+        Optional<Order> orderOptional = this.orderRepository.findById(orderId);
+
+        if (orderOptional.isEmpty()) {
+            throw new OrderNotFoundException();
+        }
+
+        Order order = orderOptional.get();
+
+        if (order.getStatus() != OrderStatusEnum.PENDING) {
+            throw new OrderStatusException("you cannot remove an item in current order status. status: "
+                    + order.getStatus());
+        }
+
+        order.removeOrderItemById(orderItemId);
+        itemRepository.deleteById(orderItemId);
+
+        orderRepository.save(order);
+
+        return this.mapToDTO(order);
+    }
+
+    @Transactional
     public OrderDTO cancel(UUID orderId) {
         Optional<Order> orderOptional = this.orderRepository.findById(orderId);
 
         if (orderOptional.isEmpty()) {
             throw new OrderNotFoundException();
         }
+
         Order order = orderOptional.get();
+
+        if (order.getStatus() != OrderStatusEnum.PENDING) {
+            throw new OrderStatusException("you cannot cancel this order in current status. status: "
+                    + order.getStatus());
+        }
+
         order.cancel();
 
         List<OrderItem> orderItems = order.getOrderItems();

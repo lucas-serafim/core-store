@@ -36,6 +36,20 @@ public class Order {
         this.status = OrderStatusEnum.CANCELLED;
     }
 
+    public void removeOrderItemById(UUID itemId) {
+        boolean isRemoved = this.orderItems.removeIf(i -> i.getId().equals(itemId));
+
+        if (!isRemoved) {
+            throw new IllegalArgumentException("Order item not found. id: " + itemId);
+        }
+
+        this.updateTotalPrice();
+    }
+
+    private void updateTotalPrice() {
+        this.totalPrice = this.orderItems.stream().mapToInt(OrderItem::getPriceAtPurchase).sum();
+    }
+
     public UUID getId() {
         return id;
     }

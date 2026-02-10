@@ -26,6 +26,16 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderDTO);
     }
 
+    @PostMapping("/{orderId}/items/{orderItemId}/remove")
+    public ResponseEntity<OrderDTO> removeOrderItem(
+            @PathVariable() UUID orderId,
+            @PathVariable() UUID orderItemId
+    ) {
+        OrderDTO orderDTO = service.removeItem(orderId, orderItemId);
+        return ResponseEntity.ok(orderDTO);
+    }
+
+
     @PostMapping("/{orderId}/cancel")
     public ResponseEntity<OrderDTO> cancel(
             @PathVariable() UUID orderId
