@@ -43,4 +43,12 @@ public class OrderController {
         OrderDTO orderDTO = service.cancel(orderId);
         return ResponseEntity.ok(orderDTO);
     }
+
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderDTO> findById(
+            @PathVariable() UUID orderId
+    ) {
+        OrderDTO orderDTO = service.findById(orderId);
+        return ResponseEntity.ok(orderDTO);
+    }
 }

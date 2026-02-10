@@ -141,6 +141,18 @@ public class OrderService {
         return this.mapToDTO(order);
     }
 
+    public OrderDTO findById(UUID orderId) {
+        Optional<Order> orderOptional = this.orderRepository.findById(orderId);
+
+        if (orderOptional.isEmpty()) {
+            throw new OrderNotFoundException();
+        }
+
+        Order order = orderOptional.get();
+
+        return this.mapToDTO(order);
+    }
+
     private OrderDTO mapToDTO(Order order) {
         return new OrderDTO(
                 order.getId(),
