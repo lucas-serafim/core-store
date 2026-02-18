@@ -23,15 +23,26 @@ public class SecurityConfiguration {
     private SecurityFilter securityFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/v1/core-store/users").permitAll()
-//                        .requestMatchers(HttpMethod.POST, "/v1/core-store/users/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/v1/core-store/users", "/v1/core-store/users/login").permitAll()
 
-                        .anyRequest().permitAll()
+                        // Admin Only
+                        .requestMatchers("/v1/core-store/categories/**").hasRole("ADMIN")
+                        .requestMatchers("/v1/core-store/products/categories/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/v1/core-store/products/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/v1/core-store/products/*").hasRole("ADMIN")
+
+                        // Authenticated Users
+                        .requestMatchers(HttpMethod.GET, "/v1/core-store/products").authenticated()
+                        .requestMatchers("/v1/core-store/orders/**").authenticated()
+                        .requestMatchers("/{orderId}/cancel").authenticated()
+
+                        // Catch-all: Deny or Require Auth (Safer than permitAll)
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
