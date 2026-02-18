@@ -2,6 +2,8 @@ package com.serafim.core_store.controller;
 
 import com.serafim.core_store.dto.CreateUserDTO;
 import com.serafim.core_store.dto.UserDTO;
+import com.serafim.core_store.dto.UserLoginDTO;
+import com.serafim.core_store.dto.UserLoginResponseDTO;
 import com.serafim.core_store.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +25,11 @@ public class UserController {
     public ResponseEntity<UserDTO> create(@RequestBody @Valid CreateUserDTO dto) {
         UserDTO userDTO = service.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserLoginResponseDTO> login(@RequestBody @Valid UserLoginDTO dto) {
+        UserLoginResponseDTO userLoginResponseDTO = service.login(dto);
+        return ResponseEntity.ok(userLoginResponseDTO);
     }
 }
