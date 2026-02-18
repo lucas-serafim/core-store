@@ -153,6 +153,8 @@ public class OrderService {
         return this.mapToDTO(order);
     }
 
+    // TODO: API to filter orders by user
+
     private OrderDTO mapToDTO(Order order) {
         return new OrderDTO(
                 order.getId(),
