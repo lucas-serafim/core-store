@@ -1,7 +1,7 @@
 package com.serafim.core_store.controller;
 
-import com.serafim.core_store.dto.CategoryDTO;
-import com.serafim.core_store.dto.CreateUpdateCategoryDTO;
+import com.serafim.core_store.dto.category.CategoryDTO;
+import com.serafim.core_store.dto.category.CreateUpdateCategoryDTO;
 import com.serafim.core_store.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

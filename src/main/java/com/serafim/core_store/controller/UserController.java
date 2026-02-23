@@ -1,9 +1,9 @@
 package com.serafim.core_store.controller;
 
-import com.serafim.core_store.dto.CreateUserDTO;
-import com.serafim.core_store.dto.UserDTO;
-import com.serafim.core_store.dto.UserLoginDTO;
-import com.serafim.core_store.dto.UserLoginResponseDTO;
+import com.serafim.core_store.dto.user.CreateUserDTO;
+import com.serafim.core_store.dto.user.UserDTO;
+import com.serafim.core_store.dto.user.UserLoginDTO;
+import com.serafim.core_store.dto.user.UserLoginResponseDTO;
 import com.serafim.core_store.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.serafim.core_store.controller;
 
-import com.serafim.core_store.dto.CreateOrderDTO;
-import com.serafim.core_store.dto.OrderDTO;
+import com.serafim.core_store.dto.order.CreateOrderDTO;
+import com.serafim.core_store.dto.order.OrderDTO;
 import com.serafim.core_store.model.User;
 import com.serafim.core_store.service.OrderService;
 import jakarta.validation.Valid;

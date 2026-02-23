@@ -1,8 +1,8 @@
 package com.serafim.core_store.service;
 
-import com.serafim.core_store.dto.CreateProductDTO;
-import com.serafim.core_store.dto.ProductDTO;
-import com.serafim.core_store.dto.UpdateProductDTO;
+import com.serafim.core_store.dto.product.CreateProductDTO;
+import com.serafim.core_store.dto.product.ProductDTO;
+import com.serafim.core_store.dto.product.UpdateProductDTO;
 import com.serafim.core_store.exception.CategoryNotFoundException;
 import com.serafim.core_store.exception.ProductNotFoundException;
 import com.serafim.core_store.model.Category;

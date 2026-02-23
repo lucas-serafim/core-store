@@ -1,4 +1,4 @@
-package com.serafim.core_store.dto;
+package com.serafim.core_store.dto.product;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;

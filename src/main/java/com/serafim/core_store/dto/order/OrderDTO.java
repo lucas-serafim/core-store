@@ -1,4 +1,4 @@
-package com.serafim.core_store.dto;
+package com.serafim.core_store.dto.order;
 
 import com.serafim.core_store.model.OrderStatusEnum;
 

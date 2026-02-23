@@ -1,4 +1,4 @@
-package com.serafim.core_store.dto;
+package com.serafim.core_store.dto.category;
 
 import jakarta.validation.constraints.NotBlank;
 

@@ -1,7 +1,7 @@
 package com.serafim.core_store.service;
 
-import com.serafim.core_store.dto.CategoryDTO;
-import com.serafim.core_store.dto.CreateUpdateCategoryDTO;
+import com.serafim.core_store.dto.category.CategoryDTO;
+import com.serafim.core_store.dto.category.CreateUpdateCategoryDTO;
 import com.serafim.core_store.exception.CategoryAlreadyExistsException;
 import com.serafim.core_store.exception.CategoryNotFoundException;
 import com.serafim.core_store.model.Category;

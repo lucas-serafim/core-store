@@ -1,9 +1,9 @@
 package com.serafim.core_store.service;
 
-import com.serafim.core_store.dto.CreateOrderDTO;
-import com.serafim.core_store.dto.OrderDTO;
-import com.serafim.core_store.dto.CreateOrderItemsDTO;
-import com.serafim.core_store.dto.OrderItemsDTO;
+import com.serafim.core_store.dto.order.CreateOrderDTO;
+import com.serafim.core_store.dto.order.OrderDTO;
+import com.serafim.core_store.dto.order.CreateOrderItemsDTO;
+import com.serafim.core_store.dto.order.OrderItemsDTO;
 import com.serafim.core_store.exception.OrderStatusException;
 import com.serafim.core_store.exception.OrderSizeLimitException;
 import com.serafim.core_store.exception.OrderNotFoundException;

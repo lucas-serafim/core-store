@@ -1,10 +1,11 @@
 package com.serafim.core_store.service;
 
-import com.serafim.core_store.dto.CreateUserDTO;
-import com.serafim.core_store.dto.UserDTO;
-import com.serafim.core_store.dto.UserLoginDTO;
-import com.serafim.core_store.dto.UserLoginResponseDTO;
+import com.serafim.core_store.dto.user.CreateUserDTO;
+import com.serafim.core_store.dto.user.UserDTO;
+import com.serafim.core_store.dto.user.UserLoginDTO;
+import com.serafim.core_store.dto.user.UserLoginResponseDTO;
 import com.serafim.core_store.exception.EmailAlreadyExistException;
+import com.serafim.core_store.exception.SignInException;
 import com.serafim.core_store.model.User;
 import com.serafim.core_store.model.UserRoleEnum;
 import com.serafim.core_store.repository.UserRepository;
@@ -47,12 +48,18 @@ public class UserService {
     }
 
     public UserLoginResponseDTO login(UserLoginDTO dto) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        var token = this.tokenService.generateToken((User) auth.getPrincipal());
+        try {
+            var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
 
-        return new UserLoginResponseDTO(token);
+            var auth = this.authenticationManager.authenticate(usernamePassword);
+            var token = this.tokenService.generateToken((User) auth.getPrincipal());
+
+            return new UserLoginResponseDTO(token);
+        } catch (Exception e) {
+            throw new SignInException();
+        }
+
     }
 
     public UserDTO mapToDTO(User user) {
