@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -54,5 +55,15 @@ public class OrderController {
     ) {
         OrderDTO orderDTO = service.findById(orderId);
         return ResponseEntity.ok(orderDTO);
+    }
+
+    @GetMapping("/users/current")
+    public ResponseEntity<List<OrderDTO>> findAllByUserId(
+            Authentication authentication
+    ) {
+        User user = (User) authentication.getPrincipal();
+        List<OrderDTO> orderDTOS = service.findAllByUserId(user);
+
+        return ResponseEntity.ok(orderDTOS);
     }
 }

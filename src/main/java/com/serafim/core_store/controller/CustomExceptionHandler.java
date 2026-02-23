@@ -6,12 +6,11 @@ import com.serafim.core_store.exception.CategoryNotFoundException;
 import com.serafim.core_store.exception.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.Instant;
-
+// TODO: add more exception cases
 @ControllerAdvice
 public class CustomExceptionHandler {
 

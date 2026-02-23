@@ -151,7 +151,10 @@ public class OrderService {
         return this.mapToDTO(order);
     }
 
-    // TODO: API to filter orders by user
+    public List<OrderDTO> findAllByUserId(User user) {
+        List<Order> orders = orderRepository.findAllByUserId(user.getId());
+        return orders.stream().map(this::mapToDTO).toList();
+    }
 
     private OrderDTO mapToDTO(Order order) {
         return new OrderDTO(
