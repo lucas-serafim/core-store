@@ -2,11 +2,13 @@ package com.serafim.core_store.controller;
 
 import com.serafim.core_store.dto.CreateOrderDTO;
 import com.serafim.core_store.dto.OrderDTO;
+import com.serafim.core_store.model.User;
 import com.serafim.core_store.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -20,9 +22,12 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<OrderDTO> create(
-            @Valid @RequestBody CreateOrderDTO dto
+            @Valid @RequestBody CreateOrderDTO dto,
+            Authentication authentication
     ) {
-        OrderDTO orderDTO = service.create(dto);
+        User user = (User) authentication.getPrincipal();
+
+        OrderDTO orderDTO = service.create(dto, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(orderDTO);
     }
 
@@ -34,7 +39,6 @@ public class OrderController {
         OrderDTO orderDTO = service.removeItem(orderId, orderItemId);
         return ResponseEntity.ok(orderDTO);
     }
-
 
     @PostMapping("/{orderId}/cancel")
     public ResponseEntity<OrderDTO> cancel(

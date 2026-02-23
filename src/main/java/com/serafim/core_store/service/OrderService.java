@@ -8,10 +8,7 @@ import com.serafim.core_store.exception.OrderStatusException;
 import com.serafim.core_store.exception.OrderSizeLimitException;
 import com.serafim.core_store.exception.OrderNotFoundException;
 import com.serafim.core_store.exception.ProductNotFoundException;
-import com.serafim.core_store.model.Order;
-import com.serafim.core_store.model.OrderItem;
-import com.serafim.core_store.model.OrderStatusEnum;
-import com.serafim.core_store.model.Product;
+import com.serafim.core_store.model.*;
 import com.serafim.core_store.repository.OrderItemRepository;
 import com.serafim.core_store.repository.OrderRepository;
 import com.serafim.core_store.repository.ProductRepository;
@@ -35,7 +32,7 @@ public class OrderService {
     private OrderItemRepository itemRepository;
 
     @Transactional
-    public OrderDTO create(CreateOrderDTO dto) {
+    public OrderDTO create(CreateOrderDTO dto, User user) {
 
         if (dto.items().isEmpty()) {
             throw new OrderSizeLimitException("Order must have at least 1 item.");
@@ -78,7 +75,8 @@ public class OrderService {
 
         Order order = new Order(
                 totalOrder,
-                OrderStatusEnum.PENDING
+                OrderStatusEnum.PENDING,
+                user
         );
 
         order.setOrderItems(orderItems);

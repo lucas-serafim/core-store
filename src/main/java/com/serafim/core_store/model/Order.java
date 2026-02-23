@@ -26,10 +26,10 @@ public class Order {
     public Order() {
     }
 
-    // TODO: Add user
-    public Order(Integer totalPrice, OrderStatusEnum status) {
+    public Order(Integer totalPrice, OrderStatusEnum status, User user) {
         this.totalPrice = totalPrice;
         this.status = status;
+        this.user = user;
     }
 
     public void cancel() {
